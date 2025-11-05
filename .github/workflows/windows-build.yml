@@ -33,12 +33,12 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      # 3️⃣ 下载预编译 Skia（官方 aseprite 发布的版本）
+      # 3️⃣ 下载预编译 Skia（官方 aseprite 发布的最新版本）
       - name: Download prebuilt Skia
         shell: bash
         run: |
           mkdir aseprite-skia
-          curl -L -o skia.zip https://github.com/aseprite/skia/releases/download/m102-1/skia-windows.zip
+          curl -L -o skia.zip https://github.com/aseprite/skia/releases/download/m102-2/skia-windows.zip
           unzip -q skia.zip -d aseprite-skia
 
       # 4️⃣ 配置 Aseprite 构建
@@ -61,7 +61,7 @@ jobs:
           cd build
           ninja aseprite
 
-      # 6️⃣ 打包 EXE + 依赖 DLL 成 ZIP（免安装可直接运行）
+      # 6️⃣ 打包可执行文件和 DLL
       - name: Package output
         shell: bash
         run: |
@@ -71,7 +71,7 @@ jobs:
           cd package
           7z a ../Aseprite-Windows-x64.zip .
 
-      # 7️⃣ 上传产物
+      # 7️⃣ 上传结果
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
