@@ -54,7 +54,7 @@ jobs:
         powershell Compress-Archive -Path dist\* -DestinationPath aseprite-windows.zip
 
     - name: Upload Artifact
-      uses: actions/artifacts@v4
+      uses: actions/artifact@v4
       with:
         name: aseprite-windows
         path: aseprite-windows.zip
