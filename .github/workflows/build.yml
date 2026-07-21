@@ -54,6 +54,37 @@ jobs:
         cd build && ninja -j2 aseprite
 
     - name: Create Release Package
+      shell: cmd
+      run: |
+        mkdir dist
+        copy build\bin\aseprite.exe dist\
+        xcopy /E /I build\bin\data dist\data
+        powershell Compress-Archive -Path dist\* -DestinationPath aseprite-windows.zip
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: aseprite-windows
+        path: aseprite-windows.zip      with:
+        arch: x64
+
+    - name: Generating Makefiles
+      shell: bash
+      run: |
+        cmake -S . -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DENABLE_TESTS=OFF \
+          -DENABLE_SCRIPTING=ON \
+          -DLAF_BACKEND=skia \
+          -DSKIA_DIR=$(realpath skia) \
+          -DSKIA_LIBRARY_DIR=$(realpath skia/out/Release-x64)
+
+    - name: Compiling
+      shell: bash
+      run: |
+        cd build && ninja -j2 aseprite
+
+    - name: Create Release Package
       run: |
         mkdir dist
         copy build\bin\aseprite.exe dist\
