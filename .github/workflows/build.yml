@@ -65,8 +65,8 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: aseprite-windows
-        path: aseprite-windows.zip      with:
-        arch: x64
+        path: aseprite-windows.zip    
+        with:arch: x64
 
     - name: Generating Makefiles
       shell: bash
