@@ -1,8 +1,6 @@
 name: Build Aseprite (Release)
-
 on:
-  workflow_dispatch: # 支持手动触发
-
+  workflow_dispatch:
 jobs:
   build:
     runs-on: windows-latest
@@ -12,7 +10,15 @@ jobs:
       with:
         submodules: 'recursive'
 
+    - name: Cache Skia
+      id: cache-skia
+      uses: actions/cache@v4
+      with:
+        path: skia
+        key: skia-windows-x64-${{ hashFiles('laf/misc/skia-url.sh') }}
+
     - name: Install Skia
+      if: steps.cache-skia.outputs.cache-hit != 'true'
       shell: bash
       run: |
         this_dir=$(cygpath "${{ github.workspace }}")
@@ -44,7 +50,7 @@ jobs:
     - name: Compiling
       shell: bash
       run: |
-        cd build && ninja aseprite
+        cd build && ninja -j2 aseprite
 
     - name: Create Release Package
       run: |
