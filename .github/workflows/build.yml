@@ -51,7 +51,7 @@ jobs:
     - name: Compiling
       shell: bash
       run: |
-        cd build && ninja -j2 aseprite
+        cd build && ninja -j1 aseprite
 
     - name: Create Release Package
       shell: cmd
